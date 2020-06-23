@@ -3,7 +3,6 @@ const authConfig = require('../config/auth.json');
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization;
-
     if (!authHeader)
         return res.status(401).send({
             error: 'Token not provided'
@@ -27,6 +26,6 @@ module.exports = (req, res, next) => {
         if (err) return res.status(401).send({
             error: 'Token invalid'
         });
+        next();
     });
-    next();
 }

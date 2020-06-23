@@ -16,6 +16,6 @@ public class TokenController {
     }
 
     public static boolean isEmpty() {
-        return mToken == null;
+        return getToken() == null;
     }
 }

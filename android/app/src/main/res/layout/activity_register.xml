@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    tools:context=".Register">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/yellow_rabbit"
-            android:text="@string/tittle_login"
+            android:text="@string/tittle_register"
             android:textSize="60dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -60,22 +60,25 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            style="@style/ButtonStyle"
-            android:id="@+id/btn_login"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_register"
-            android:text="@string/go_register"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15px"
-            android:layout_gravity="center"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/re_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/re_password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/btn_register"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/register" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

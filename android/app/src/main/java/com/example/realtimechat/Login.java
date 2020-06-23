@@ -1,8 +1,10 @@
 package com.example.realtimechat;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,8 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.realtimechat.model.LoginHTTP;
 import com.example.realtimechat.model.User;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +25,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     EditText edtUsername;
     EditText edtPassword;
+    TextView tv_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,13 @@ public class Login extends AppCompatActivity {
                 login();
             }
         });
+        tv_register = findViewById(R.id.tv_register);
+        tv_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goRegister();
+            }
+        });
     }
 
     private void hideInput(View view){
@@ -74,7 +84,12 @@ public class Login extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void login() { ;
+    private void goRegister() {
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+    }
+
+    private void login() { ;
         String username = edtUsername.getText().toString();
         String password = edtPassword.getText().toString();
         User user = new User(username, password);
@@ -95,8 +110,9 @@ public class Login extends AppCompatActivity {
             alertMessage("Não foi possível se conectar com o servidor. Verifique sua conexão de internet.");
         } else if (status == 200) {
             alertMessage("Login efetuado com sucesso.");
-            Intent intent = new Intent(this, MainActivity.class);
-            finish();
+            Intent intent = new Intent(this, Home.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else {
             alertMessage("Ocorreu um erro inesperado.");
         }

@@ -1,14 +1,19 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const user = require('./user');
+const authenticator = require('../middleware/authenticator');
 
 const authConfig = require('../config/auth.json');
 
 const generateToken = (params = {}) => {
     return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400
+        expiresIn: 20 //86400
     });
 }
+
+router.get('/validatetoken', authenticator, (req, res) => {
+    res.status(200).send('OK');
+} );
 
 
 router.post('/register', (req, res) => {

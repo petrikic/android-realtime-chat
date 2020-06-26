@@ -24,6 +24,9 @@ public class LoginHTTP extends AsyncTask<Void, Void, Integer> {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected Integer doInBackground(Void... voids) {
+
+        TokenController tokenController = TokenController.getInstance();
+
         String urlParameters = "username=" + username + "&password=" + password;
         byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
         int postDataLength = postData.length;
@@ -52,7 +55,7 @@ public class LoginHTTP extends AsyncTask<Void, Void, Integer> {
             String response = scanner.next();
 
             if (!response.isEmpty())
-                TokenController.setToken(response);
+                tokenController.setToken(response);
 
             return statusCode;
         } catch (IOException e) {

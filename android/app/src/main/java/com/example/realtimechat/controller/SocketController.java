@@ -17,7 +17,9 @@ public class SocketController {
     }
 
     private static void createInstance() {
-        final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsInVzZXJuYW1lIjoiY2xlcmlzdG9uIiwiaWF0IjoxNTkyNjIwMTgxLCJleHAiOjE1OTI3MDY1ODF9.eEuvQQo_4KbVz5k3-USHXWyMWylf3x6Nhh2xVemr8FU";
+
+        final TokenController tokenController = TokenController.getInstance();
+
         try {
             mSocket = IO.socket("http://10.0.2.2:3000");
             mSocket.io().on(Manager.EVENT_TRANSPORT, new Emitter.Listener() {
@@ -31,7 +33,7 @@ public class SocketController {
                             @SuppressWarnings("unchecked")
                             Map<String, List<String>> headers = (Map<String, List<String>>)args[0];
                             // modify request headers
-                            headers.put("authorization", Arrays.asList(token));
+                            headers.put("authorization", Arrays.asList(tokenController.getToken()));
                         }
                     });
                 }
@@ -40,6 +42,10 @@ public class SocketController {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void clearInstance() {
+        mSocket = null;
     }
 
     public static synchronized Socket getInstance() {

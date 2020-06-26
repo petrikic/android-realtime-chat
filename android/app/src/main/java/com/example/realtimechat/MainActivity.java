@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.realtimechat.controller.SocketController;
 import com.example.realtimechat.controller.TokenController;
 import com.example.realtimechat.model.ValidateTokenHTTP;
-import com.github.nkzawa.socketio.client.Socket;
+
 
 import java.util.concurrent.ExecutionException;
 
@@ -20,18 +20,17 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tv;
 
-    private Socket socket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TokenController tokenController = TokenController.getInstance();
+
         tv = findViewById(R.id.tv);
 
-        //socket = SocketController.getInstance();
-        //socket.connect();
 
-        if(TokenController.isEmpty()){
+        if(tokenController.isEmpty()){
             goToLogin();
         } else {
             validateToken();
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             int status = validateToken.execute().get();
             if(status == 401) {
+                SocketController.clearInstance();
                 goToLogin();
                 alertMessage("Token expirado.");
             } else if (status == 502){

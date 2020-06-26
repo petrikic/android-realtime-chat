@@ -7,7 +7,7 @@ const authConfig = require('../config/auth.json');
 
 const generateToken = (params = {}) => {
     return jwt.sign(params, authConfig.secret, {
-        expiresIn: 20 //86400
+        expiresIn: 86400
     });
 }
 

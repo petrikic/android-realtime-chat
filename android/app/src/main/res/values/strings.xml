@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Realtime Chat</string>
+    <string name="app_name"><b>Converse.io</b></string>
     <string name="title_activity_login">Login</string>
     <string name="user">Usuário</string>
     <string name="password">Senha</string>
@@ -7,7 +7,7 @@
     <string name="register">Cadastrar</string>
     <string name="tittle_login">Login</string>
     <string name="tittle_register">Cadastro</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">Converse.io</string>
     <string name="go_register"><b>Não tem cadastro? <u>clique aqui</u></b></string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -18,4 +18,15 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="re_password">Repita a senha</string>
+    <string name="btn_chat">Enviar</string>
+    <string name="message">Digite a mensagem ...</string>
+
+    <string name="settings">Configurações</string>
+    <string name="logout">Sair</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_messages">Mensagens</string>
+    <string name="tab_online">Online</string>
+    <string name="back_item">back item</string>
 </resources>

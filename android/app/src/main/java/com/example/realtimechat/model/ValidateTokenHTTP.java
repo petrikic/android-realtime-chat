@@ -12,11 +12,13 @@ public class ValidateTokenHTTP extends AsyncTask <Void, Void, Integer> {
     @Override
     protected Integer doInBackground(Void... voids) {
 
+        TokenController tokenController = TokenController.getInstance();
+
         try {
             URL url = new URL("http://10.0.2.2:3000/auth/validatetoken");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("authorization", "Bearer " + TokenController.getToken());
+            connection.setRequestProperty("authorization", "Bearer " + tokenController.getToken());
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(15000);
             connection.setDoOutput(false);

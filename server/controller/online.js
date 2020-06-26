@@ -1,22 +1,40 @@
-var stackOnline = [];
+const user = require('./user');
 
-const addUser = (user) => {
-    stackOnline.push(user);
+let stackOnline = [];
+let sockets = {};
+
+
+const addUser = (userid, socket) => {
+    sockets[userid] = socket;
 }
 
-const removeUser = (user) => {
-    stackOnline.pop(user);
+const removeUser = (userid) => {
+    delete sockets[userid];
 }
 
-const checkUser = (user) => {
-    return stackOnline.includes(user);
+const checkUser = (userid) => {
+    return sockets[userid] && true;
 }
 
-const listUsers = () => {
-    return stackOnline.filter((i, j) => stackOnline.indexOf(i) === j);
+const listUsers = (myId) => {
+    objUsers = [];
+
+    Object.keys(sockets).forEach(userid => {
+        if (userid != myId) {
+            usr = user.findById(userid);
+            objUsers.push(usr);
+        }
+    });
+    console.log(objUsers)
+    return objUsers;
+}
+
+const getSocket = (user) => {
+    return sockets[user];
 }
 
 exports.set = addUser;
 exports.remove = removeUser;
 exports.check = checkUser;
 exports.list = listUsers;
+exports.getSocket = getSocket;

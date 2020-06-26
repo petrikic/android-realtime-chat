@@ -3,6 +3,8 @@ package com.example.realtimechat.model;
 import android.os.AsyncTask;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
+
+import com.example.App;
 import com.example.realtimechat.controller.TokenController;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class LoginHTTP extends AsyncTask<Void, Void, Integer> {
         byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
         int postDataLength = postData.length;
         try {
-            URL url = new URL("http://10.0.2.2:3000/auth/login");
+            URL url = new URL(App.APLICATION_ADDRESS + "/auth/login");
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");

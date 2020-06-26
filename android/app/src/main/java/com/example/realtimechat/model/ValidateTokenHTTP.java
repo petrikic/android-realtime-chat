@@ -2,6 +2,7 @@ package com.example.realtimechat.model;
 
 import android.os.AsyncTask;
 
+import com.example.App;
 import com.example.realtimechat.controller.TokenController;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class ValidateTokenHTTP extends AsyncTask <Void, Void, Integer> {
         TokenController tokenController = TokenController.getInstance();
 
         try {
-            URL url = new URL("http://10.0.2.2:3000/auth/validatetoken");
+            URL url = new URL(App.APLICATION_ADDRESS + "/auth/validatetoken");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("authorization", "Bearer " + tokenController.getToken());

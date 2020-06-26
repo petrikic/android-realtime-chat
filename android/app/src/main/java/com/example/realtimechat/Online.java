@@ -1,29 +1,29 @@
 package com.example.realtimechat;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.app.Fragment;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.realtimechat.controller.OnlineController;
+import com.example.realtimechat.controller.SocketController;
 import com.example.realtimechat.model.User;
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
-
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
 
 
@@ -31,7 +31,7 @@ public class Online extends Fragment {
 
     Socket socket;
     private GroupAdapter adapter;
-    private JSONArray users;
+    private RecyclerView rv;
 
     public Online() {
         // Required empty public constructor
@@ -42,9 +42,9 @@ public class Online extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_online, container, false);
-        //socket = SocketController.getInstance();
+        socket = SocketController.getInstance();
 
-        RecyclerView rv = view.findViewById(R.id.recycler);
+        rv = view.findViewById(R.id.recycler);
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -61,6 +61,9 @@ public class Online extends Fragment {
         });
 
         fetchUsers();
+
+        socket.on("newUser", newUser);
+        socket.on("dropUser", dropUser);
 
         return view;
     }
@@ -91,6 +94,40 @@ public class Online extends Fragment {
             return R.layout.item_user;
         }
     }
+
+    private Emitter.Listener newUser = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject user = (JSONObject) args[0];
+                    try {
+                        int id = user.getInt("id");
+                        String username = user.getString("username");
+                        String url = user.getString("urlPhoto");
+                        User u = new User(id, url, username);
+                        adapter.add(new UserItem(u));
+                    } catch (JSONException e) {
+                        Log.e("JSONError", e.getMessage(), e);
+                    }
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener dropUser = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.clear();
+                    fetchUsers();
+                }
+            });
+        }
+    };
 
     private void fetchUsers() {
         ArrayList<User> users = OnlineController.getUsers();

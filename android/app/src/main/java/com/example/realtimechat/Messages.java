@@ -25,16 +25,10 @@ public class Messages extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        socket = SocketController.getInstance();
-
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
-        btn = view.findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                socket.emit("teste", "teste");
-            }
-        });
+
+
+
         return view;
     }
 }

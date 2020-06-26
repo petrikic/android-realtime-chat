@@ -74,11 +74,11 @@
         android:ems="10"
         android:hint="@string/message"
         android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_chat"
-        app:layout_constraintStart_toStartOf="parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_chat"
@@ -103,6 +103,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/edt_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

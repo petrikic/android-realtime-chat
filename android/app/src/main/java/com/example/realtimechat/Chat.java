@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,9 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.realtimechat.controller.SocketController;
+import com.example.realtimechat.database.ControllerDB;
 import com.example.realtimechat.model.Message;
 import com.example.realtimechat.model.User;
 import com.github.nkzawa.emitter.Emitter;
@@ -28,18 +31,25 @@ import com.xwray.groupie.ViewHolder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class Chat extends AppCompatActivity {
 
     private GroupAdapter adapter;
+    private RecyclerView rv;
     private Toolbar mToolbar;
     private Socket socket;
     private EditText edt_message;
     private User user;
+    private ControllerDB controllerDB;
+    private int messageSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        controllerDB = ControllerDB.getInstance();
 
         socket = SocketController.getInstance();
         mToolbar = findViewById(R.id.tb_chat);
@@ -61,7 +71,7 @@ public class Chat extends AppCompatActivity {
         //mToolbar.inflateMenu(R.menu.default_menu);
 
         Button btn_send = findViewById(R.id.btn_chat);
-        btn_send. setOnClickListener(new View.OnClickListener() {
+        btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();
@@ -70,17 +80,20 @@ public class Chat extends AppCompatActivity {
         });
 
 
-        RecyclerView rv = findViewById(R.id.recycler);
+        rv = findViewById(R.id.recycler);
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
         socket.on("receiveMessage", receiveMessage);
 
+        fetchMessages();
+        rv.scrollToPosition(messageSize - 1);
+
     }
 
     private void sendMessage() {
-        if(edt_message.getText().length() > 0) {
+        if (edt_message.getText().length() > 0) {
             String text = edt_message.getText().toString();
             edt_message.setText("");
             long uuid = user.getId();
@@ -104,11 +117,12 @@ public class Chat extends AppCompatActivity {
                     JSONObject data = (JSONObject) args[0];
                     try {
                         String text = data.getString("text");
+                        long userReferenceId = data.getLong("userReferenceId");
                         long senderId = data.getLong("senderId");
                         long timestamp = data.getLong("timestamp");
-                        boolean isLeft = data.getBoolean("isLeft");
-                        Message message = new Message(text, senderId, senderId, timestamp);
-                        adapter.add(new MessageItem(isLeft, message));
+                        Message message = new Message(text, userReferenceId, senderId, timestamp);
+                        adapter.add(new MessageItem(message));
+                        rv.scrollToPosition(messageSize++);
 
                     } catch (JSONException e) {
                         Log.e("JSONError", e.getMessage(), e);
@@ -118,6 +132,14 @@ public class Chat extends AppCompatActivity {
         }
     };
 
+    private void fetchMessages() {
+        List<Message> messages = controllerDB.getMessages(user);
+        for (Message message : messages) {
+            adapter.add(new MessageItem(message));
+            messageSize++;
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,8 +147,8 @@ public class Chat extends AppCompatActivity {
         return true;
     }
 
-    private void hideInput(View view){
-        if(view!=null){
+    private void hideInput(View view) {
+        if (view != null) {
             InputMethodManager inputMethodManager =
                     (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
 
@@ -134,13 +156,11 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-    private class MessageItem extends Item <ViewHolder> {
+    private class MessageItem extends Item<ViewHolder> {
 
-        private final boolean isLeft;
         private final Message message;
 
-        private MessageItem(boolean isLeft, Message message) {
-            this.isLeft = isLeft;
+        private MessageItem(Message message) {
             this.message = message;
         }
 
@@ -153,7 +173,8 @@ public class Chat extends AppCompatActivity {
 
         @Override
         public int getLayout() {
-            return isLeft ? R.layout.item_from_message: R.layout.item_to_message;
+            return message.getSenderId() == user.getId() ?
+                    R.layout.item_from_message : R.layout.item_to_message;
         }
     }
 }

@@ -1,4 +1,5 @@
 package com.example.realtimechat.controller;
+import com.example.App;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.engineio.client.Transport;
 import com.github.nkzawa.socketio.client.IO;
@@ -21,7 +22,7 @@ public class SocketController {
         final TokenController tokenController = TokenController.getInstance();
 
         try {
-            mSocket = IO.socket("http://10.0.2.2:3000");
+            mSocket = IO.socket(App.APLICATION_ADDRESS);
             mSocket.io().on(Manager.EVENT_TRANSPORT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {

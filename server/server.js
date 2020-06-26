@@ -7,6 +7,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('./events/socket')(server);
 
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false

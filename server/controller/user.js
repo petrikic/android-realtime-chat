@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const insertUser = (user) => {
     user.password = bcrypt.hashSync(user.password, 10);
+    user.urlPhoto = 'https://habitusinvestimentos.com.br/wp-content/uploads/2019/12/facebook-avatar.jpg';
     db.insert('users', user, (result) =>{
         if(result.error){
             throw result.error;
@@ -25,8 +26,14 @@ const updateUser = (user) => {
 }
 
 const findOne = (username) => {
-    let SQL_SELECT_ONE = `SELECT userid, username FROM users
+    let SQL_SELECT_ONE = `SELECT id, username, urlPhoto FROM users
                                 WHERE username = "${username}";`;
+    return result = db.run(SQL_SELECT_ONE)[0];
+}
+
+const findById = (userid) => {
+    let SQL_SELECT_ONE = `SELECT id, username, urlPhoto FROM users
+                                WHERE id = "${userid}";`;
     return result = db.run(SQL_SELECT_ONE)[0];
 }
 
@@ -47,4 +54,5 @@ exports.delete = deleteUser;
 exports.update = updateUser;
 exports.find = findUser;
 exports.findOne = findOne;
+exports.findById = findById;
 exports.list = listUsers;

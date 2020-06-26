@@ -14,7 +14,7 @@ public class ScriptDDL {
     public static final String messageDB() {
         String stmt = "CREATE TABLE IF NOT EXISTS message (\n" +
                 "  messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                "  heId INTEGER,\n" +
+                "  userReferenceId INTEGER,\n" +
                 "  senderId INTEGER,\n" +
                 "  text TEXT,\n" +
                 "  timestamp INTEGER\n" +

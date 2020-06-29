@@ -1,24 +1,17 @@
 package com.example.realtimechat;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.realtimechat.controller.SocketController;
 import com.example.realtimechat.controller.TokenController;
 import com.example.realtimechat.model.ValidateTokenHTTP;
-
-
 import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TokenController tokenController = TokenController.getInstance();
-
-        tv = findViewById(R.id.tv);
 
 
         if(tokenController.isEmpty()){

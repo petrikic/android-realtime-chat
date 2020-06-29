@@ -13,7 +13,7 @@ const removeUser = (userid) => {
 }
 
 const checkUser = (userid) => {
-    return sockets[userid] && true;
+    return sockets[userid];
 }
 
 const listUsers = (myId) => {
@@ -25,7 +25,6 @@ const listUsers = (myId) => {
             objUsers.push(usr);
         }
     });
-    console.log(objUsers)
     return objUsers;
 }
 

@@ -1,27 +1,21 @@
 package com.example.realtimechat;
-
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Toast;
-
+import android.view.MenuItem;
+import androidx.appcompat.widget.Toolbar;
 import com.example.realtimechat.controller.OnlineController;
 import com.example.realtimechat.controller.SocketController;
+import com.example.realtimechat.controller.TokenController;
 import com.example.realtimechat.database.ControllerDB;
 import com.example.realtimechat.model.Message;
 import com.example.realtimechat.model.User;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
-
 import com.google.android.material.tabs.TabLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +28,8 @@ public class Home extends AppCompatActivity {
     private Socket socket;
     private JSONArray users;
     private ControllerDB controllerDB;
+    private TokenController tokenController;
+    private OnlineController onlineController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +37,8 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         controllerDB = ControllerDB.getInstance();
+        tokenController = TokenController.getInstance();
+        onlineController = OnlineController.getInstance();
 
         socket = SocketController.getInstance();
         socket.connect();
@@ -74,6 +72,29 @@ public class Home extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        Toolbar mToolbar = findViewById(R.id.tb_home);
+        mToolbar.inflateMenu(R.menu.default_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.settings:
+                        Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
+                        startActivity(intentSettings);
+                        return true;
+
+                    case R.id.logout:
+                        controllerDB.trashMessages();
+                        tokenController.deleteToken();
+                        socket.disconnect();
+                        finish();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     private Emitter.Listener listUsers = new Emitter.Listener() {
@@ -91,7 +112,7 @@ public class Home extends AppCompatActivity {
                             String username = user.getString("username");
                             String url = user.getString("urlPhoto");
                             User u = new User(id, url, username);
-                            OnlineController.addOne(u);
+                            onlineController.addOne(u);
                         }
                     } catch (JSONException e) {
                         Log.e("JSONError", e.getMessage(), e);
@@ -113,7 +134,7 @@ public class Home extends AppCompatActivity {
                         String username = user.getString("username");
                         String url = user.getString("urlPhoto");
                         User u = new User(id, url, username);
-                        OnlineController.addOne(u);
+                        onlineController.addOne(u);
                     } catch (JSONException e) {
                         Log.e("JSONError", e.getMessage(), e);
                     }
@@ -134,7 +155,7 @@ public class Home extends AppCompatActivity {
                         String username = user.getString("username");
                         String url = user.getString("urlPhoto");
                         User u = new User(id, url, username);
-                        OnlineController.removeOne(u);
+                        onlineController.removeOne(u);
                     } catch (JSONException e) {
                         Log.e("JSONError", e.getMessage(), e);
                     }
@@ -179,4 +200,5 @@ public class Home extends AppCompatActivity {
         ft.replace(R.id.content, fragMessages, "Messages");
         ft.commit();
     }
+
 }

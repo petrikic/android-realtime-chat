@@ -28,7 +28,7 @@ Este projeto configura o trabalho final da disciplina de Programação para Disp
 * Sqlite-sync
 
 ### Instalação
-* Clone o repositório (git clone https://github.com/petrikic/tf-prog-disp-mov).
+* Clone o repositório (git clone https://github.com/petrikic/android-realtime-chat).
 * Execute o comando `npm install` ou `yarn`.
 * Inicie o server com o comando `npm start` ou `yarn start`.
 * Após iniciar o server, abra com o android studio o projeto na pasta android.

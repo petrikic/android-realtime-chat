@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const insertUser = (user) => {
     user.password = bcrypt.hashSync(user.password, 10);
-    user.urlPhoto = 'https://habitusinvestimentos.com.br/wp-content/uploads/2019/12/facebook-avatar.jpg';
+    user.urlPhoto = '/unknow.jpg';
     db.insert('users', user, (result) =>{
         if(result.error){
             throw result.error;

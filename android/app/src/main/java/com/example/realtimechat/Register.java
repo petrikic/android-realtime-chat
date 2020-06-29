@@ -116,7 +116,7 @@ public class Register extends AppCompatActivity {
             alertMessage("Não foi possível se conectar com o servidor. Verifique sua conexão de internet.");
         } else if (status == 200) {
             alertMessage("Cadastro realizado com sucesso.");
-            Intent intent = new Intent(this, Home.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.App;
 import com.example.realtimechat.controller.SocketController;
 import com.example.realtimechat.database.ControllerDB;
 import com.example.realtimechat.model.Message;
@@ -57,7 +58,7 @@ public class Chat extends AppCompatActivity {
         TextView txt = findViewById(R.id.title_toolbar);
 
         user = getIntent().getExtras().getParcelable("user");
-        Picasso.get().load(user.getUrlPhoto()).into(img);
+        Picasso.get().load(App.APLICATION_ADDRESS + user.getUrlPhoto()).into(img);
         txt.setText(user.getUsername());
 
         edt_message = findViewById(R.id.edt_chat);
@@ -68,7 +69,6 @@ public class Chat extends AppCompatActivity {
                 finish();
             }
         });
-        //mToolbar.inflateMenu(R.menu.default_menu);
 
         Button btn_send = findViewById(R.id.btn_chat);
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -140,12 +140,6 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.default_menu, menu);
-        return true;
-    }
 
     private void hideInput(View view) {
         if (view != null) {

@@ -12,9 +12,12 @@ exports.use = (io) => {
         }
         online.set(userid, client);
 
-
         client.emit('listUsers', {
             users: online.list(userid)
+        });
+
+        client.on('getUser', data => {
+            client.emit('getUser', user.findById(data.uuid));
         });
 
 

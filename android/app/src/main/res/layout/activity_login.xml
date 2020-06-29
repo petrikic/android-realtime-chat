@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -20,14 +20,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:srcCompat="@drawable/logo"
             android:layout_gravity="center"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/ButtonStyle"
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:layout_gravity="center"
             android:text="@string/login" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_register"
             android:text="@string/go_register"
             android:textColor="@color/colorPrimaryDark"
@@ -77,6 +77,6 @@
             android:layout_marginTop="15px"
             android:layout_gravity="center"/>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

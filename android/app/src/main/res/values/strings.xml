@@ -29,4 +29,7 @@
     <string name="tab_messages">Mensagens</string>
     <string name="tab_online">Online</string>
     <string name="back_item">back item</string>
+    <string name="creator">by Cleiston Nantes</string>
+    <string name="recent_messages">Sem conversas recentes para mostrar</string>
+    <string name="select">Selecionar foto</string>
 </resources>

@@ -5,17 +5,18 @@ import com.example.realtimechat.model.User;
 import java.util.ArrayList;
 
 public class OnlineController {
-    private static ArrayList<User> users = new ArrayList<User>();
+    private ArrayList<User> users;
+    private static OnlineController onlineController;
 
     private OnlineController() {
-
+        users = new ArrayList<User>();
     }
 
-    public static void addOne(User user) {
+    public void addOne(User user) {
         users.add(user);
     }
 
-    public static void removeOne(User user) {
+    public void removeOne(User user) {
         for(User u : users) {
             if (user.getId() == u.getId()) {
                 users.remove(u);
@@ -23,8 +24,14 @@ public class OnlineController {
         }
     }
 
-    public static ArrayList<User> getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
+    }
+
+    public static OnlineController getInstance() {
+        if(onlineController == null)
+            onlineController = new OnlineController();
+        return onlineController;
     }
 
 

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.App;
 import com.example.realtimechat.controller.OnlineController;
 import com.example.realtimechat.controller.SocketController;
 import com.example.realtimechat.model.User;
@@ -21,7 +23,6 @@ import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class Online extends Fragment {
     Socket socket;
     private GroupAdapter adapter;
     private RecyclerView rv;
+    private OnlineController onlineController;
 
     public Online() {
         // Required empty public constructor
@@ -42,7 +44,9 @@ public class Online extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_online, container, false);
+
         socket = SocketController.getInstance();
+        onlineController = OnlineController.getInstance();
 
         rv = view.findViewById(R.id.recycler);
         adapter = new GroupAdapter();
@@ -83,10 +87,7 @@ public class Online extends Fragment {
 
             username.setText(user.getUsername());
 
-
-            Picasso.get()
-                    .load(user.getUrlPhoto())
-                    .into(userImage);
+            Picasso.get().load(App.APLICATION_ADDRESS + user.getUrlPhoto()).into(userImage);
         }
 
         @Override
@@ -98,39 +99,43 @@ public class Online extends Fragment {
     private Emitter.Listener newUser = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject user = (JSONObject) args[0];
-                    try {
-                        int id = user.getInt("id");
-                        String username = user.getString("username");
-                        String url = user.getString("urlPhoto");
-                        User u = new User(id, url, username);
-                        adapter.add(new UserItem(u));
-                    } catch (JSONException e) {
-                        Log.e("JSONError", e.getMessage(), e);
+            if(getActivity() != null){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject user = (JSONObject) args[0];
+                        try {
+                            int id = user.getInt("id");
+                            String username = user.getString("username");
+                            String url = user.getString("urlPhoto");
+                            User u = new User(id, url, username);
+                            adapter.add(new UserItem(u));
+                        } catch (JSONException e) {
+                            Log.e("JSONError", e.getMessage(), e);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     };
 
     private Emitter.Listener dropUser = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.clear();
-                    fetchUsers();
-                }
-            });
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.clear();
+                        fetchUsers();
+                    }
+                });
+            }
         }
     };
 
     private void fetchUsers() {
-        ArrayList<User> users = OnlineController.getUsers();
+        ArrayList<User> users = onlineController.getUsers();
         for(User user: users) {
             adapter.add(new UserItem(user));
         }

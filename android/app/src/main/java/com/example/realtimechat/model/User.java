@@ -3,7 +3,6 @@ package com.example.realtimechat.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.net.URL;
 
 public class User implements Parcelable {
     private long id;

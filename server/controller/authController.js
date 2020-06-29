@@ -36,9 +36,7 @@ router.post('/register', (req, res) => {
     } else {
         user.insert(usr);
         const userInfo = user.findOne(usr.username);
-        res.status(200).send({
-            token: generateToken(userInfo)
-        });
+        res.status(200).send(generateToken(userInfo));
     }
 });
 

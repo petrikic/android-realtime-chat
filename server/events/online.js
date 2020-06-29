@@ -17,6 +17,10 @@ exports.use = (io) => {
             users: online.list(userid)
         });
 
+        client.on('getUser', data => {
+            client.emit('getUser', user.findById(data.uuid));
+        });
+
 
         client.on("disconnect", () => {
             online.remove(userid);

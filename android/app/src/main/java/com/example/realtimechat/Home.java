@@ -1,27 +1,23 @@
 package com.example.realtimechat;
-
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Toast;
-
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.appcompat.widget.Toolbar;
 import com.example.realtimechat.controller.OnlineController;
 import com.example.realtimechat.controller.SocketController;
+import com.example.realtimechat.controller.TokenController;
 import com.example.realtimechat.database.ControllerDB;
 import com.example.realtimechat.model.Message;
 import com.example.realtimechat.model.User;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
-
 import com.google.android.material.tabs.TabLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +30,7 @@ public class Home extends AppCompatActivity {
     private Socket socket;
     private JSONArray users;
     private ControllerDB controllerDB;
+    private TokenController tokenController = TokenController.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +69,29 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        Toolbar mToolbar = findViewById(R.id.tb_home);
+        mToolbar.inflateMenu(R.menu.default_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.settings:
+                        Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
+                        startActivity(intentSettings);
+                        return true;
+
+                    case R.id.logout:
+                        tokenController.deleteToken();
+                        Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
+                        intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intentMain);
+                        return true;
+
+                    default:
+                        return false;
+                }
             }
         });
     }
@@ -179,4 +199,5 @@ public class Home extends AppCompatActivity {
         ft.replace(R.id.content, fragMessages, "Messages");
         ft.commit();
     }
+
 }

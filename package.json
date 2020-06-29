@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "nodemon server/server.js"
+  },
   "name": "Chat-Realtime-Android",
   "version": "1.0.0",
   "description": "Este projeto configura o trabalho final da disciplina de Programação para Dispositivos Móveis - FACOM - UFMS.",
@@ -12,6 +15,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
     "socket.io": "^2.3.0",
     "sqlite-sync": "^0.3.9"
   }

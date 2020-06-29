@@ -21,7 +21,6 @@ import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -98,34 +97,38 @@ public class Online extends Fragment {
     private Emitter.Listener newUser = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject user = (JSONObject) args[0];
-                    try {
-                        int id = user.getInt("id");
-                        String username = user.getString("username");
-                        String url = user.getString("urlPhoto");
-                        User u = new User(id, url, username);
-                        adapter.add(new UserItem(u));
-                    } catch (JSONException e) {
-                        Log.e("JSONError", e.getMessage(), e);
+            if(getActivity() != null){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject user = (JSONObject) args[0];
+                        try {
+                            int id = user.getInt("id");
+                            String username = user.getString("username");
+                            String url = user.getString("urlPhoto");
+                            User u = new User(id, url, username);
+                            adapter.add(new UserItem(u));
+                        } catch (JSONException e) {
+                            Log.e("JSONError", e.getMessage(), e);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     };
 
     private Emitter.Listener dropUser = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.clear();
-                    fetchUsers();
-                }
-            });
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.clear();
+                        fetchUsers();
+                    }
+                });
+            }
         }
     };
 

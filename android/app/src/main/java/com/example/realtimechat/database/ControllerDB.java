@@ -71,6 +71,11 @@ public class ControllerDB {
         db.update("token", contentValues, null, null);
     }
 
+    public void deleteToken() {
+        String stmt = "DELETE FROM token;";
+        db.delete("token",null, null);
+    }
+
     public String getToken() {
         String stmt = "SELECT token FROM token";
         String token = null;
@@ -103,4 +108,38 @@ public class ControllerDB {
 
         return messages;
     }
+
+    public List<Long> getUsersId() {
+        List<Long> usersId = new ArrayList<Long>();
+
+        String stmtUUID = "SELECT DISTINCT userReferenceId from message ";
+        Cursor c = db.rawQuery(stmtUUID, null);
+        if (c.moveToFirst()) {
+            do {
+                long uuid = c.getLong(c.getColumnIndex("userReferenceId"));
+                usersId.add(uuid);
+            } while (c.moveToNext());
+        }
+        return usersId;
+    }
+
+    public Message getLastMessage(User user) {
+        Message message = null;
+        String stmt = "SELECT * FROM message WHERE UserReferenceId = ? " +
+                "ORDER BY timestamp DESC LIMIT 1";
+
+        Cursor c = db.rawQuery(stmt, new String[]{user.getId() + ""});
+        if (c.moveToFirst()) {
+            long messageId = c.getLong(c.getColumnIndex("messageId"));
+            long userReferenceId = c.getLong(c.getColumnIndex("userReferenceId"));
+            long senderId = c.getLong(c.getColumnIndex("senderId"));
+            String text = c.getString(c.getColumnIndex("text"));
+            long timestamp = c.getLong(c.getColumnIndex("timestamp"));
+
+            message = new Message(messageId, userReferenceId, senderId, text, timestamp);
+        }
+
+        return message;
+    }
+
 }

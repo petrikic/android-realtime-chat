@@ -68,7 +68,6 @@ public class Chat extends AppCompatActivity {
                 finish();
             }
         });
-        //mToolbar.inflateMenu(R.menu.default_menu);
 
         Button btn_send = findViewById(R.id.btn_chat);
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -140,12 +139,6 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.default_menu, menu);
-        return true;
-    }
 
     private void hideInput(View view) {
         if (view != null) {

@@ -37,6 +37,11 @@ public class TokenController {
         mToken = token;
     }
 
+    public void deleteToken() {
+        controllerDB.deleteToken();
+        mToken = null;
+    }
+
     public boolean isEmpty() {
         return getToken() == null;
     }

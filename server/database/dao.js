@@ -1,6 +1,5 @@
-
 const sqlite = require('sqlite-sync');
-sqlite.connect('./database/database.db3');
+sqlite.connect(__dirname + '/database.db3');
 
 
 const SQL_CREATE = `CREATE TABLE IF NOT EXISTS Users(
@@ -10,6 +9,15 @@ const SQL_CREATE = `CREATE TABLE IF NOT EXISTS Users(
                         urlPhoto
                     );`;
 
+const SQL_CREATE_MESSAGES = `CREATE TABLE IF NOT EXISTS messages(
+                        text TEXT,
+                        userReferenceId INTEGER,
+                        senderId INTEGER,
+                        receiverId INTEGER,
+                        timestamp INTEGER
+                    );`;
+
 sqlite.run(SQL_CREATE);
+sqlite.run(SQL_CREATE_MESSAGES);
 
 module.exports = sqlite;
